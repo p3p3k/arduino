@@ -1,0 +1,53 @@
+ char* bit_decrypt(const char* text)
+    {
+    if (text == NULL ) return NULL;
+    char* txtw =(char*) calloc((2*strlen(text)),sizeof(char));
+    int len=strlen(text);
+    strcpy(txtw,text);
+    int lent[strlen(text)];
+    int temp[8*len];
+    
+    
+    for(int i = 0; i<len;i++){
+    	txtw[i] = (unsigned char) txtw[i];    
+    }
+    	 int a=0;
+    for (int j=0 ; j<len; j++)
+        {
+        lent[j] =(unsigned char) txtw[j];
+    for (int i=1; i<=8;i++)
+        {
+        if (lent[j]>=pow(2,8-i)){
+            temp[a]=1;
+            lent[j] = lent[j] - pow(2,8-i);
+            }
+        else temp[a]=0;
+        a++;    
+        }
+        }
+        //decrypt
+        for(int i=0;i<a; i=i+8){
+        	for(int j=4;j<8;j++)
+        		if(temp[j+i]==temp[j+i-4]) temp[j+i]=0;
+        		else temp[j+i]=1;
+        for(int j = 0; j<4; j=j+2){      
+        
+    	int pom=temp[i+j];
+    	temp[i+j]=temp[i+j+1];
+    	temp[i+j+1]=pom;
+    	}
+    	}
+    	int b=0;
+    	for(int i=0; i<len;i++)
+    		for(int j=1; j<=8;j++){
+    			if(temp[b]==1){
+    				lent[i] = lent[i]+pow(2,8-i);
+    			}
+    			b++;
+    		}
+    		for(int i=0 ; i<len; i++){
+    			txtw[i]=(char) lent[i];
+    		}
+    		return txtw;
+        
+        }
